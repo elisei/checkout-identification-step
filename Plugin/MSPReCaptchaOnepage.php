@@ -61,7 +61,13 @@ class MSPReCaptchaOnepage
     }
 
     /**
-     * @inheritDoc
+     * Select Components for Change.
+     *
+     * @param LayoutProcessor $layoutProcessor
+     * @param callable        $proceed
+     * @param array           $args
+     *
+     * @return array
      */
     public function aroundProcess(Onepage $layoutProcessor, callable $proceed, ...$args): array
     {
