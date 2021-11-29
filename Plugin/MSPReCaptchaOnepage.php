@@ -63,9 +63,9 @@ class MSPReCaptchaOnepage
     /**
      * Select Components for Change.
      *
-     * @param LayoutProcessor $layoutProcessor
-     * @param callable        $proceed
-     * @param array           $args
+     * @param Onepage   $layoutProcessor
+     * @param callable  $proceed
+     * @param array     $args
      *
      * @return array
      */
