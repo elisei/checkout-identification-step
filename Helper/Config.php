@@ -19,13 +19,13 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Config extends AbstractHelper
 {
-    protected const CONFIG_PATH_GENERAL = 'checkout_identification_step/general/%s';
+    public const CONFIG_PATH_GENERAL = 'checkout_identification_step/general/%s';
 
-    protected const CONFIG_PATH_UX_CUSTOMER = 'checkout_identification_step/general/ux/customer/%s';
+    public const CONFIG_PATH_UX_CUSTOMER = 'checkout_identification_step/general/ux/customer/%s';
 
-    protected const CONFIG_PATH_UX_NEW_CUSTOMER = 'checkout_identification_step/general/ux/new_customer/%s';
+    public const CONFIG_PATH_UX_NEW_CUSTOMER = 'checkout_identification_step/general/ux/new_customer/%s';
 
-    protected const CONFIG_PATH_UX_GUEST = 'checkout_identification_step/general/ux/guest/%s';
+    public const CONFIG_PATH_UX_GUEST = 'checkout_identification_step/general/ux/guest/%s';
 
     /**
      * @var ScopeConfigInterface
