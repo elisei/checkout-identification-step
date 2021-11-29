@@ -17,9 +17,9 @@
                 type="O2TI\CheckoutIdentificationStep\Plugin\AddtionalCustomerData" 
                 sortOrder="100"/>
     </type>
-    <type name="Magento\ReCaptchaCheckout\Block\LayoutProcessor\Checkout\Onepage">
+    <type name="MSP\ReCaptcha\Block\LayoutProcessor\Checkout\Onepage">
         <plugin name="o2ti_additional_recaptcha" 
-                type="O2TI\CheckoutIdentificationStep\Plugin\ReCaptchaOnepage" 
+                type="O2TI\CheckoutIdentificationStep\Plugin\MSPReCaptchaOnepage" 
                 sortOrder="100"/>
     </type>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
