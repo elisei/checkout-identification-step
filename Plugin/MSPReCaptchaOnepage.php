@@ -1,6 +1,7 @@
 <?php
 /**
  * Copyright © O2TI. All rights reserved.
+ *
  * @author    Bruno Elisei <brunoelisei@o2ti.com>
  * See COPYING.txt for license details.
  */
@@ -9,10 +10,6 @@ namespace O2TI\CheckoutIdentificationStep\Plugin;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use MSP\ReCaptcha\Block\LayoutProcessor\Checkout\Onepage;
-use Magento\ReCaptchaUi\Model\IsCaptchaEnabledInterface;
-use Magento\ReCaptchaUi\Model\UiConfigResolverInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use MSP\ReCaptcha\Model\Config as MSPConfig;
 use MSP\ReCaptcha\Model\LayoutSettings;
 use O2TI\CheckoutIdentificationStep\Helper\Config;
@@ -44,9 +41,9 @@ class MSPReCaptchaOnepage
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param LayoutSettings $layoutSettings
-     * @param MSPConfig $mspConfig
-     * @param Config $config
+     * @param LayoutSettings       $layoutSettings
+     * @param MSPConfig            $mspConfig
+     * @param Config               $config
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -63,9 +60,9 @@ class MSPReCaptchaOnepage
     /**
      * Select Components for Change.
      *
-     * @param Onepage   $layoutProcessor
-     * @param callable  $proceed
-     * @param array     $args
+     * @param Onepage  $layoutProcessor
+     * @param callable $proceed
+     * @param array    $args
      *
      * @return array
      */
@@ -73,16 +70,15 @@ class MSPReCaptchaOnepage
     {
         $jsLayout = $proceed(...$args);
         if ($this->config->isEnabled()) {
-
             if ($this->mspConfig->isEnabledFrontend()) {
                 $key = 'customer_login';
-                 // phpcs:ignore
+                // phpcs:ignore
                 $jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['msp_recaptcha']['settings'] = $this->layoutSettings->getCaptchaSettings();
             } else {
-                 // phpcs:ignore
+                // phpcs:ignore
                 if (isset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['msp_recaptcha'])
                 ) {
-                     // phpcs:ignore
+                    // phpcs:ignore
                     unset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['msp_recaptcha']);
                 }
             }
