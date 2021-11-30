@@ -27,9 +27,9 @@ define([
 						if (!$(usernameSelector).val()) {
 							stepNavigator.setHash("identification");
 						}
-					}
-					if(!window.checkoutConfig.identificationConfig.isContiuneAsGuest){
-						stepNavigator.setHash("identification");
+						if(!window.checkoutConfig.identificationConfig.isContiuneAsGuest){
+							stepNavigator.setHash("identification");
+						}
 					}
 				}
 				return result;
