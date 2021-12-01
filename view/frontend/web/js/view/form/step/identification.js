@@ -369,7 +369,6 @@ define([
 		 * @return {string} text
 		 */
 		continueOSCText() {
-			console.log(this.resolveTypeIdentification());
 			if(this.resolveTypeIdentification() === 'customer' || this.resolveTypeIdentification() === 'new-customer') {
 				return $t('Continue as guest');
 			}

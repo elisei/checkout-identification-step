@@ -202,6 +202,12 @@ class CheckoutIdentificationStep
                         'component'   => 'O2TI_CheckoutIdentificationStep/js/view/create-account-messages',
                         'displayArea' => 'messages',
                     ],
+                    'recaptcha' => [
+                        'component'    => 'Magento_ReCaptchaFrontendUi/js/reCaptcha',
+                        'displayArea'  => 'additional-create-account-fields',
+                        'configSource' => 'checkoutConfig',
+                        'reCaptchaId'  => 'recaptcha-checkout-create-account',
+                    ],
                 ],
             ],
         ];

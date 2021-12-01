@@ -82,6 +82,19 @@ class ReCaptchaOnepage
                 }
             }
             $layoutProcessor = $layoutProcessor;
+
+            $key = 'checkout_create_account';
+            if ($this->isCaptchaEnabled->isCaptchaEnabledFor($key)) {
+                // phpcs:ignore
+                $jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['createAccount']['children']['recaptcha']['settings'] = $this->captchaUiConfigResolver->get($key);
+            } else {
+                // phpcs:ignore
+                if (isset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['createAccount']['children']['recaptcha'])) {
+                    // phpcs:ignore
+                    unset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['createAccount']['children']['recaptcha']);
+                }
+            }
+            $layoutProcessor = $layoutProcessor;
         }
 
         return $jsLayout;

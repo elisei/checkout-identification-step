@@ -18,25 +18,28 @@ define([
 	"Magento_Customer/js/customer-data",
 	"O2TI_CheckoutIdentificationStep/js/model/create-account-messages",
 	"mage/translate",
-	"mage/mage"
+	"Magento_Checkout/js/model/full-screen-loader",
+	"mage/validation"
 ], function(
 	$,
 	ko,
 	_,
 	Component,
 	customer,
-	createAccount,
+	createAccountAction,
 	quote,
 	checkoutData,
 	checkoutDataResolver,
 	customerData,
 	createAccountMessageList,
-	$t
+	$t,
+	fullScreenLoader
 ) {
 	"use strict";
 	
 	return Component.extend({
 		defaults: {
+			formId: '#createAccount',
 			formData: "createAccount"
 		},
 
@@ -111,12 +114,13 @@ define([
 		/**
 		 * Form submit handler
 		 *
-		 * This method can have any name.
+		 * @param {HTMLElement} createAccount - form element.
 		 */
-		onSubmit: function() {
-			var accountData;
-			
-			this.source.set('params.invalid', false);
+		createAccount: function(createAccount) {
+			var accountData = {},
+                formDataArray = $(createAccount).serializeArray();
+
+            this.source.set('params.invalid', false);
 			this.source.trigger(this.dataScopePrefix + '.data.validate');
 
 			if (this.source.get(this.dataScopePrefix + '.create_account')) {
@@ -124,9 +128,16 @@ define([
 			}
 
 			if (!this.source.get('params.invalid')) {
+				fullScreenLoader.startLoader();
 				accountData = this.source.get(this.dataScopePrefix);
+				formDataArray.forEach(function (entry) {
+	                accountData[entry.name] = entry.value;
+	            });
 				accountData.email = this.currentEmailIdentification();
-				createAccount(accountData, createAccountMessageList);
+				console.log(accountData);
+				createAccountAction(accountData).always(function () {
+                    fullScreenLoader.stopLoader();
+                });
 			}
 		}
 	});
