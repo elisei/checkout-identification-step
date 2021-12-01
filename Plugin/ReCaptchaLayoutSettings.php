@@ -1,6 +1,6 @@
 <?php
 /**
- * MageSpecialist
+ * MageSpecialist.
  *
  * NOTICE OF LICENSE
  *
@@ -13,7 +13,7 @@
  * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
- * @package    MSP_ReCaptcha
+ *
  * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -41,6 +41,7 @@ class ReCaptchaLayoutSettings
 
     /**
      * Config constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param Config               $config
      */
@@ -53,7 +54,7 @@ class ReCaptchaLayoutSettings
     }
 
     /**
-     * Implements MSP ReCaptcha config for frontend
+     * Implements MSP ReCaptcha config for frontend.
      *
      * @param LayoutSettings $layoutProcessor
      * @param callable       $proceed
@@ -65,11 +66,13 @@ class ReCaptchaLayoutSettings
     {
         $configs = $proceed(...$args);
         $configs['enabled']['checkout_create_account'] = $this->isEnabledCheckoutAccountCreate();
+
         return $configs;
     }
 
     /**
-     * Return true if enabled on checkout create account
+     * Return true if enabled on checkout create account.
+     *
      * @return bool
      */
     public function isEnabledCheckoutAccountCreate()

@@ -207,7 +207,7 @@ class CheckoutIdentificationStep
                         'displayArea'  => 'additional-create-account-fields',
                         'configSource' => 'checkoutConfig',
                         'reCaptchaId'  => 'msp-recaptcha-checkout-create-account',
-                        'zone'         => 'checkout_create_account'
+                        'zone'         => 'checkout_create_account',
                     ],
                 ],
             ],
