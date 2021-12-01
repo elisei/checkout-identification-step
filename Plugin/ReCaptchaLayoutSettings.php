@@ -27,6 +27,7 @@ use MSP\ReCaptcha\Model\LayoutSettings;
 
 class ReCaptchaLayoutSettings
 {
+    // phpcs:ignore
     public const XML_PATH_ENABLED_CHECKOUT_CREATE_ACCOUNT = 'msp_securitysuite_recaptcha/frontend/enabled_checkout_create_account';
 
     /**

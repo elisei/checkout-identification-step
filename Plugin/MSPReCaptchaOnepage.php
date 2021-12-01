@@ -71,9 +71,10 @@ class MSPReCaptchaOnepage
         $jsLayout = $proceed(...$args);
         if ($this->config->isEnabled()) {
             if ($this->mspConfig->isEnabledFrontend()) {
-                // phpcs:ignore
                 $settings = $this->layoutSettings->getCaptchaSettings();
+                // phpcs:ignore
                 $jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['msp_recaptcha']['settings'] = $settings;
+                // phpcs:ignore
                 $jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['createAccount']['children']['msp_recaptcha']['settings'] = $settings;
             } else {
                 // phpcs:ignore
