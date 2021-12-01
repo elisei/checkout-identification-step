@@ -1,4 +1,4 @@
-# Field Sort in Checkout
+# Checkout Identification Step
 
 ## License
 
