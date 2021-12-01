@@ -55,12 +55,12 @@ class AjaxCreateAccountObserver implements ObserverInterface
     private $errorProcessor;
 
     /**
-     * @param CaptchaResponseResolverInterface $captchaResponseResolver
+     * @param CaptchaResponseResolverInterface  $captchaResponseResolver
      * @param ValidationConfigResolverInterface $validationConfigResolver
-     * @param ValidatorInterface $captchaValidator
-     * @param IsCaptchaEnabledInterface $isCaptchaEnabled
-     * @param LoggerInterface $logger
-     * @param ErrorProcessor $errorProcessor
+     * @param ValidatorInterface                $captchaValidator
+     * @param IsCaptchaEnabledInterface         $isCaptchaEnabled
+     * @param LoggerInterface                   $logger
+     * @param ErrorProcessor                    $errorProcessor
      */
     public function __construct(
         CaptchaResponseResolverInterface $captchaResponseResolver,
@@ -102,6 +102,7 @@ class AjaxCreateAccountObserver implements ObserverInterface
                     [],
                     $key
                 );
+
                 return;
             }
 
