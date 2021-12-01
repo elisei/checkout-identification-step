@@ -263,7 +263,6 @@ define([
 				formDataArray.forEach(function (entry) {
 						loginData[entry.name] = entry.value;
 				});
-
 				if (this.isPasswordVisible() && $(loginForm).validation() && $(loginForm).validation('isValid')) {
 						fullScreenLoader.startLoader();
 						loginAction(loginData).always(function () {
@@ -369,7 +368,6 @@ define([
 		 * @return {string} text
 		 */
 		continueOSCText() {
-			console.log(this.resolveTypeIdentification());
 			if(this.resolveTypeIdentification() === 'customer' || this.resolveTypeIdentification() === 'new-customer') {
 				return $t('Continue as guest');
 			}

@@ -26,10 +26,10 @@
                 </ux>
             </general>
         </checkout_identification_step>
-        <recaptcha_frontend>
-            <type_for>
-                <checkout_create_account/>
-            </type_for>
-        </recaptcha_frontend>
+        <msp_securitysuite_recaptcha>
+            <frontend>
+                <enabled_checkout_create_account/>
+            </frontend>
+        </msp_securitysuite_recaptcha>
     </default>
 </config>

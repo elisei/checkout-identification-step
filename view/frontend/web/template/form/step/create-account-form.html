@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<form data-bind="attr: {'data-hasrequired': $t('* Required Fields')}" class="form form-account-create">
+<form class="form form-account-create" data-role="email-with-possible-create-account"
+    data-bind="submit:createAccount, attr: {'data-hasrequired': $t('* Required Fields'), id: 'createAccount'}"
+    method="post">
     <fieldset class="fieldset create-account" data-form="createAccount">
         <!-- ko foreach: getRegion('messages') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
@@ -25,6 +27,9 @@
             </div>
         </div>
         <!-- ko foreach: getRegion('create-account-fieldset') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <!-- ko foreach: getRegion('additional-create-account-fields') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
         <!-- ko if: isRememberMeCheckboxVisible() -->
@@ -58,7 +63,7 @@
         <!-- /ko -->
         <div class="actions-toolbar">
             <input name="context" type="hidden" value="checkout" />
-            <button type="button" data-bind="click: onSubmit" class="button action primary">
+            <button type="submit" class="button action primary" data-action="checkout-method-create-account">
                 <span data-bind="i18n: 'Create Account'"></span>
             </button>
         </div>

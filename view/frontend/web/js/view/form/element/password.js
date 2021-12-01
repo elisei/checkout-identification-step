@@ -59,7 +59,6 @@ define([
 			this._super()
 					.observe('disabled visible value isViewCreatePassword');
 			this.isViewCreatePassword.subscribe(function (isChecked) {
-				console.log("change");
 				this._showPassword(isChecked);
 			}.bind(this));
 			return this;

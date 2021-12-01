@@ -58,7 +58,7 @@ class MSPReCaptchaOnepage
     }
 
     /**
-     * Select Components for Change.
+     * Implements MSP ReCaptcha.
      *
      * @param Onepage  $layoutProcessor
      * @param callable $proceed
@@ -71,15 +71,22 @@ class MSPReCaptchaOnepage
         $jsLayout = $proceed(...$args);
         if ($this->config->isEnabled()) {
             if ($this->mspConfig->isEnabledFrontend()) {
-                $key = 'customer_login';
                 // phpcs:ignore
-                $jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['msp_recaptcha']['settings'] = $this->layoutSettings->getCaptchaSettings();
+                $settings = $this->layoutSettings->getCaptchaSettings();
+                $jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['msp_recaptcha']['settings'] = $settings;
+                $jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['createAccount']['children']['msp_recaptcha']['settings'] = $settings;
             } else {
                 // phpcs:ignore
                 if (isset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['msp_recaptcha'])
                 ) {
                     // phpcs:ignore
                     unset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['msp_recaptcha']);
+                }
+                // phpcs:ignore
+                if (isset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['createAccount']['children']['msp_recaptcha'])
+                ) {
+                    // phpcs:ignore
+                    unset($jsLayout['components']['checkout']['children']['steps']['children']['identification-step']['children']['identification']['children']['createAccount']['children']['msp_recaptcha']);
                 }
             }
             $layoutProcessor = $layoutProcessor;
