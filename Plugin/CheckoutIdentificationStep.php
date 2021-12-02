@@ -16,22 +16,11 @@ use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Options;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\AttributeMapper;
 use O2TI\CheckoutIdentificationStep\Helper\Config;
 
 class CheckoutIdentificationStep
 {
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var Config
-     */
-    protected $config;
-
     /**
      * @var AttributeMetadataDataProvider
      */
@@ -58,14 +47,19 @@ class CheckoutIdentificationStep
     protected $checkoutDataHelper;
 
     /**
-     * @var StoreManagerInterface
+     * @var ScopeConfigInterface
      */
-    protected $storeManager;
+    protected $scopeConfig;
 
     /**
      * @var Dob
      */
     protected $dob;
+
+    /**
+     * @var Config
+     */
+    protected $config;
 
     /**
      * @param AttributeMetadataDataProvider $attributeMetadataDataProvider

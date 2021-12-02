@@ -8,7 +8,6 @@
 
 namespace O2TI\CheckoutIdentificationStep\Plugin;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\ReCaptchaCheckout\Block\LayoutProcessor\Checkout\Onepage;
 use Magento\ReCaptchaUi\Model\IsCaptchaEnabledInterface;
 use Magento\ReCaptchaUi\Model\UiConfigResolverInterface;
@@ -30,28 +29,20 @@ class ReCaptchaOnepage
     protected $isCaptchaEnabled;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * @var Config
      */
     protected $config;
 
     /**
-     * @param ScopeConfigInterface      $scopeConfig
      * @param UiConfigResolverInterface $captchaUiConfigResolver
      * @param IsCaptchaEnabledInterface $isCaptchaEnabled
      * @param Config                    $config
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         UiConfigResolverInterface $captchaUiConfigResolver,
         IsCaptchaEnabledInterface $isCaptchaEnabled,
         Config $config
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->captchaUiConfigResolver = $captchaUiConfigResolver;
         $this->isCaptchaEnabled = $isCaptchaEnabled;
         $this->config = $config;
