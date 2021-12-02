@@ -302,11 +302,11 @@ define([
 		logout(logoutForm) {
 			var logoutData = {},
 				textAlert;
-			
-			textAlert = $t('We will keep your items and you can use another email to complete your purchase.');
 
-			if(!this.isCleanOnLogout) {
-				textAlert = $t('When exiting your account your cart will be deleted.');
+			textAlert = $t('When exiting your account your cart will be deleted.');
+
+			if(this.isCleanOnLogout() === false) {
+				textAlert = $t('We will keep your items and you can use another email to complete your purchase.');
 			}
 
 			confirmation({
