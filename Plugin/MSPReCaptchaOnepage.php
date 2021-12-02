@@ -8,7 +8,6 @@
 
 namespace O2TI\CheckoutIdentificationStep\Plugin;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use MSP\ReCaptcha\Block\LayoutProcessor\Checkout\Onepage;
 use MSP\ReCaptcha\Model\Config as MSPConfig;
 use MSP\ReCaptcha\Model\LayoutSettings;
@@ -30,28 +29,20 @@ class MSPReCaptchaOnepage
     protected $mspConfig;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * @var Config
      */
     protected $config;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
      * @param LayoutSettings       $layoutSettings
      * @param MSPConfig            $mspConfig
      * @param Config               $config
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         LayoutSettings $layoutSettings,
         MSPConfig $mspConfig,
         Config $config
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->layoutSettings = $layoutSettings;
         $this->mspConfig = $mspConfig;
         $this->config = $config;
