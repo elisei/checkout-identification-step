@@ -34,9 +34,9 @@ class MSPReCaptchaOnepage
     protected $config;
 
     /**
-     * @param LayoutSettings       $layoutSettings
-     * @param MSPConfig            $mspConfig
-     * @param Config               $config
+     * @param LayoutSettings $layoutSettings
+     * @param MSPConfig      $mspConfig
+     * @param Config         $config
      */
     public function __construct(
         LayoutSettings $layoutSettings,
