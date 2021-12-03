@@ -8,6 +8,7 @@ Status Atual
 
 [![Build Status](https://app.travis-ci.com/elisei/checkout-identification-step.svg?branch=Magento%402.3)](https://app.travis-ci.com/elisei/checkout-identification-step)
 [![StyleCI](https://github.styleci.io/repos/432328264/shield?branch=Magento@2.3)](https://github.styleci.io/repos/432328264?branch=Magento@2.3)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/elisei/checkout-identification-step/badges/quality-score.png?b=Magento%402.3)](https://scrutinizer-ci.com/g/elisei/checkout-identification-step/)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/939d6dc3ac134fb384b67075bda95022)](https://www.codacy.com/gh/elisei/checkout-identification-step/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=elisei/checkout-identification-step&amp;utm_campaign=Badge_Grade)
 
 Estatísticas
