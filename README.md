@@ -42,7 +42,7 @@ Configure o comportamento para quando  o usuário for identificado um novo clien
 
 ## Instalação e Configuração
 
-Visite nossa [Wiki][wiki] e veja como configurar e instalar nosso módulo.
+Visite nossa [Wiki](https://github.com/elisei/checkout-identification-step/wiki) e veja como configurar e instalar nosso módulo.
 
 ## License
 
