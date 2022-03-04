@@ -20,18 +20,21 @@ define([
 			 */
 			validateShippingInformation: function () {
 				var result = this._super();
-				if(!customer.isLoggedIn()){
-					if(window.checkoutConfig.identificationConfig !== false){
-						var loginFormSelector = "form[data-role=email-with-possible-login]",
-							usernameSelector = loginFormSelector + " input[name=username]";
-						if (!$(usernameSelector).val()) {
-							stepNavigator.setHash("identification");
-						}
-						if(!window.checkoutConfig.identificationConfig.isContiuneAsGuest){
-							stepNavigator.setHash("identification");
+				if (!quote.isVirtual()) {
+					if(!customer.isLoggedIn()){
+						if(window.checkoutConfig.identificationConfig !== false){
+							var loginFormSelector = "form[data-role=email-with-possible-login]",
+								usernameSelector = loginFormSelector + " input[name=username]";
+							if (!$(usernameSelector).val()) {
+								stepNavigator.setHash("identification");
+							}
+							if(!window.checkoutConfig.identificationConfig.isContiuneAsGuest){
+								stepNavigator.setHash("identification");
+							}
 						}
 					}
 				}
+				
 				return result;
 			},
 
@@ -42,11 +45,13 @@ define([
 			 */
 			navigate: function (step) {
 				var result = this._super(step);
-				if(!customer.isLoggedIn()){
-					if(window.checkoutConfig.identificationConfig !== false){
-						if(!window.checkoutConfig.identificationConfig.isContiuneAsGuest){
-							stepNavigator.setHash("identification");
-							return false;
+				if (!quote.isVirtual()) {
+					if(!customer.isLoggedIn()){
+						if(window.checkoutConfig.identificationConfig !== false){
+							if(!window.checkoutConfig.identificationConfig.isContiuneAsGuest){
+								stepNavigator.setHash("identification");
+								return false;
+							}
 						}
 					}
 				}
