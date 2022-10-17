@@ -47,6 +47,7 @@ define([
 				this.isVisible, _.bind(this.navigate, this),
 				this.sortOrder
 			);
+			stepNavigator.setHash('identification');
 			return this;
 		},
 
