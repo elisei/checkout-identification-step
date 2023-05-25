@@ -19,6 +19,26 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    .full-checkout {
+        .form-logout,
+        .form-account-create {
+            .actions-toolbar {
+                .button {
+                    &.action {
+                        &.primary {
+                            &:extend(.abs-button-l all);
+                            &:extend(.abs-button-responsive all);
+                        }
+                    }
+                }
+            }
+        }
+
+        .g-recaptcha {
+            margin-bottom: @indent__base;
+        }
+    }
+
     .form-logout {
         .actions-toolbar {
             .action {
