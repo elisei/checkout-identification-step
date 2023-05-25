@@ -81,7 +81,6 @@ class AssociateOrdersGuestToCustomer implements \Magento\Framework\Event\Observe
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-
         /* @var $order \Magento\Sales\Model\Order */
         $orderIds = $observer->getEvent()->getOrderIds();
 

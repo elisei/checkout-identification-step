@@ -340,6 +340,7 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
      * Create customer account action.
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
