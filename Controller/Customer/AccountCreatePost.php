@@ -44,6 +44,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\UrlFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\CustomerData\SectionPoolInterface;
 
 /**
  * Post create customer action.
@@ -169,6 +170,11 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
     protected $resultRawFactory;
 
     /**
+     * @var SectionPoolInterface
+     */
+    protected $sectionPool;
+
+    /**
      * @param Context                    $context
      * @param Session                    $customerSession
      * @param ScopeConfigInterface       $scopeConfig
@@ -193,6 +199,7 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
      * @param RawFactory                 $resultRawFactory
      * @param CookieManagerInterface     $cookieManager
      * @param CookieMetadataFactory      $cookieMetadataFactory
+     * @param SectionPoolInterface       $sectionPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -220,7 +227,8 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
         JsonFactory $resultJsonFactory,
         RawFactory $resultRawFactory,
         CookieManagerInterface $cookieManager = null,
-        CookieMetadataFactory $cookieMetadataFactory = null
+        CookieMetadataFactory $cookieMetadataFactory = null,
+        SectionPoolInterface $sectionPool = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -243,10 +251,14 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
+        $this->sectionPool = $sectionPool;
         $this->cookieManager = $cookieManager ?:
             ObjectManager::getInstance()->get(CookieManagerInterface::class);
         $this->cookieMetadataFactory = $cookieMetadataFactory ?:
             ObjectManager::getInstance()->get(CookieMetadataFactory::class);
+        $this->sectionPool = $sectionPool ?:
+            ObjectManager::getInstance()->get(SectionPoolInterface::class);
+        
         parent::__construct($context);
     }
 
@@ -337,10 +349,9 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
     }
 
     /**
-     * Create customer account action.
+     * Create customer account action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
-     *
+     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\Result\Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -351,26 +362,30 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($this->session->isLoggedIn() || !$this->registration->isAllowed()) {
             $resultRedirect->setPath('*/*/');
-
             return $resultRedirect;
         }
 
-        if (!$this->getRequest()->isPost()
-            || !$this->formKeyValidator->validate($this->getRequest())
-        ) {
+        if (!$this->getRequest()->isPost() || !$this->formKeyValidator->validate($this->getRequest())) {
+            $resultRaw = $this->resultRawFactory->create();
             return $resultRaw->setHttpResponseCode($httpBadRequestCode);
         }
+
         $this->session->regenerateId();
         $response = [
-            'errors'  => false,
+            'errors' => false,
             'message' => __('Login successful.'),
+            'data' => [
+                'sections' => $this->getSectionsToReload()
+            ]
         ];
 
         try {
             $address = $this->extractAddress();
             $addresses = $address === null ? [] : [$address];
+
             $customer = $this->customerExtractor->extract('customer_account_create', $this->_request);
             $customer->setAddresses($addresses);
+
             $password = $this->getRequest()->getParam('password');
             $redirectUrl = $this->urlModel->getUrl('checkout/index/index');
 
@@ -378,13 +393,13 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
             $extensionAttributes->setIsSubscribed($this->getRequest()->getParam('is_subscribed', false));
             $customer->setExtensionAttributes($extensionAttributes);
 
-            $customer = $this->accountManagement
-                ->createAccount($customer, $password, $redirectUrl);
+            $customer = $this->accountManagement->createAccount($customer, $password, $redirectUrl);
 
             $this->_eventManager->dispatch(
                 'customer_register_success',
                 ['account_controller' => $this, 'customer' => $customer]
             );
+
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
             if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
                 $this->messageManager->addComplexSuccessMessage(
@@ -395,47 +410,97 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
                 );
                 $response = [
                     'errors' => true,
+                    'data' => [
+                        'sections' => $this->getSectionsToReload()
+                    ]
                 ];
             } else {
                 $this->session->setCustomerDataAsLoggedIn($customer);
                 $this->messageManager->addMessage($this->getMessageManagerSuccessMessage());
+                $redirectUrl = $this->accountRedirect->getRedirectCookie();
+                if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $redirectUrl) {
+                    $response['redirectUrl'] = $redirectUrl;
+                }
                 $this->accountRedirect->clearRedirectCookie();
+
+                $response = [
+                    'errors' => false,
+                    'message' => __('Login successful.'),
+                    'redirectUrl' => $redirectUrl ?: $this->urlModel->getUrl('checkout/index/index'),
+                    'data' => [
+                        'sections' => $this->getSectionsToReload()
+                    ]
+                ];
             }
+
             if ($this->cookieManager->getCookie('mage-cache-sessid')) {
                 $metadata = $this->cookieMetadataFactory->createCookieMetadata();
                 $metadata->setPath('/');
                 $this->cookieManager->deleteCookie('mage-cache-sessid', $metadata);
             }
-        } catch (StateException $e) {
-            $text = __('There is already an account with this email address.');
 
+        } catch (StateException $e) {
+            $url = $this->urlModel->getUrl('customer/account/forgotpassword');
             $response = [
-                'errors'  => true,
-                'message' => $this->createResponseMessage($text),
+                'errors' => true,
+                'message' => $this->createResponseMessage(
+                    'There is already an account with this email address. If you are sure that it is your email address, <a href="%1">click here</a> to get your password and access your account.',
+                    true,
+                    $url
+                ),
+                'data' => [
+                    'sections' => $this->getSectionsToReload()
+                ]
             ];
         } catch (InputException $e) {
-            foreach ($e->getErrors() as $error) {
-                $messages = $error->getMessage();
-            }
             $response = [
-                'errors'  => true,
-                'message' => $this->createResponseMessage($messages),
+                'errors' => true,
+                'message' => $this->createResponseMessage($e->getMessage()),
+                'data' => [
+                    'sections' => $this->getSectionsToReload()
+                ]
             ];
+            foreach ($e->getErrors() as $error) {
+                $response['message'] = $this->createResponseMessage($error->getMessage());
+                break;
+            }
         } catch (LocalizedException $e) {
             $response = [
-                'errors'  => true,
+                'errors' => true,
                 'message' => $this->createResponseMessage($e->getMessage()),
+                'data' => [
+                    'sections' => $this->getSectionsToReload()
+                ]
             ];
         } catch (\Exception $e) {
             $response = [
-                'errors'  => true,
+                'errors' => true,
                 'message' => __('We can\'t save the customer.'),
+                'data' => [
+                    'sections' => $this->getSectionsToReload()
+                ]
             ];
         }
 
+        /** @var Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-
         return $resultJson->setData($response);
+    }
+
+    /**
+     * Get sections to reload
+     *
+     * @return array
+     */
+    private function getSectionsToReload(): array
+    {
+        return [
+            'customer',
+            'cart',
+            'checkout-data',
+            'checkout-fields',
+            'directory-data'
+        ];
     }
 
     /**
