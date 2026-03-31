@@ -194,12 +194,12 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
      * @param DataObjectHelper           $dataObjectHelper
      * @param AccountRedirect            $accountRedirect
      * @param CustomerRepository         $customerRepository
-     * @param Validator                  $formKeyValidator
+     * @param ?Validator                 $formKeyValidator
      * @param JsonFactory                $resultJsonFactory
      * @param RawFactory                 $resultRawFactory
-     * @param CookieManagerInterface     $cookieManager
-     * @param CookieMetadataFactory      $cookieMetadataFactory
-     * @param SectionPoolInterface       $sectionPool
+     * @param ?CookieManagerInterface    $cookieManager
+     * @param ?CookieMetadataFactory     $cookieMetadataFactory
+     * @param ?SectionPoolInterface      $sectionPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -223,12 +223,12 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
         CustomerRepository $customerRepository,
-        Validator $formKeyValidator = null,
-        JsonFactory $resultJsonFactory,
-        RawFactory $resultRawFactory,
-        CookieManagerInterface $cookieManager = null,
-        CookieMetadataFactory $cookieMetadataFactory = null,
-        SectionPoolInterface $sectionPool = null
+        ?Validator $formKeyValidator = null,
+        ?JsonFactory $resultJsonFactory = null,
+        ?RawFactory $resultRawFactory = null,
+        ?CookieManagerInterface $cookieManager = null,
+        ?CookieMetadataFactory $cookieMetadataFactory = null,
+        ?SectionPoolInterface $sectionPool = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
@@ -249,16 +249,15 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
         $this->accountRedirect = $accountRedirect;
         $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
         $this->customerRepository = $customerRepository;
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->resultRawFactory = $resultRawFactory;
-        $this->sectionPool = $sectionPool;
+        $this->resultJsonFactory = $resultJsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
+        $this->resultRawFactory = $resultRawFactory ?: ObjectManager::getInstance()->get(RawFactory::class);
         $this->cookieManager = $cookieManager ?:
             ObjectManager::getInstance()->get(CookieManagerInterface::class);
         $this->cookieMetadataFactory = $cookieMetadataFactory ?:
             ObjectManager::getInstance()->get(CookieMetadataFactory::class);
         $this->sectionPool = $sectionPool ?:
             ObjectManager::getInstance()->get(SectionPoolInterface::class);
-        
+
         parent::__construct($context);
     }
 
@@ -506,11 +505,11 @@ class AccountCreatePost extends Action implements CsrfAwareActionInterface, Http
     /**
      * Retrieve message.
      *
-     * @param string $text
-     * @param bool   $isComplexErrorMessage
-     * @param string $url
+     * @param string      $text
+     * @param bool|null   $isComplexErrorMessage
+     * @param string|null $url
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function createResponseMessage($text, $isComplexErrorMessage = null, $url = null)
     {
